@@ -23,7 +23,7 @@ final class CardsTableViewCell: UITableViewCell {
                 }
                 
                 if let penImgUrl = displayItem.penImgUrl {
-                    backgroundImage.image = UIImage(named: penImgUrl)?.withRenderingMode(.alwaysOriginal)
+                    penImg.image = UIImage(named: penImgUrl)?.withRenderingMode(.alwaysOriginal)
                 }
                 
                 if let numLabel = displayItem.numLabel {
@@ -35,12 +35,17 @@ final class CardsTableViewCell: UITableViewCell {
                 }
                 
                 if let paymentImgUrl = displayItem.paymentImgUrl {
-                    backgroundImage.image = UIImage(named: paymentImgUrl)?.withRenderingMode(.alwaysOriginal)
+                    cardImage.image = UIImage(named: paymentImgUrl)?.withRenderingMode(.alwaysOriginal)
                 }
             }
         }
     
     // MARK: - Properties of Cell
+    
+    private let cellView: UIView = {
+        let view = UIView()
+        return view
+    }()
     
     private let backgroundImage: UIImageView = {
         let imageView = UIImageView()
@@ -73,14 +78,14 @@ final class CardsTableViewCell: UITableViewCell {
     
     private let penImg: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
     private let topStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
+//        stackView.distribution = .fill
         stackView.spacing = 8
         return stackView
     }()
@@ -108,13 +113,19 @@ final class CardsTableViewCell: UITableViewCell {
     private let cardInfoStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.spacing = 16
         return stackView
     }()
     
+    private let viewForCardImg: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let cardImage: UIImageView = {
         let imageView = UIImageView()
+        imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -143,67 +154,89 @@ final class CardsTableViewCell: UITableViewCell {
     }
     
     private func setupViews() {
-        self.contentView.addSubview(backgroundImage)
+        self.contentView.addSubview(cellView)
+        self.cellView.addSubview(backgroundImage)
+        self.backgroundImage.addSubview(topView)
+        self.topView.addSubview(balanceLabel)
+        self.topStackView.addArrangedSubview(aliasLabel)
+        self.topStackView.addArrangedSubview(penImg)
+        self.topView.addSubview(topStackView)
         
-//        self.topView.addSubview(balanceLabel)
-//        self.topStackView.addArrangedSubview(aliasLabel)
-//        self.topStackView.addArrangedSubview(penImg)
-//        self.topView.addSubview(topStackView)
-//        self.backgroundImage.addSubview(topView)
-//        
-//       
-//        self.cardInfoStackView.addArrangedSubview(numberLabel)
-//        self.cardInfoStackView.addArrangedSubview(expireLabel)
-//        self.bottomView.addSubview(cardInfoStackView)
-//        self.backgroundImage.addSubview(bottomView)
-//        self.bottomView.addSubview(cardImage)
+        self.backgroundImage.addSubview(bottomView)
+        self.cardInfoStackView.addArrangedSubview(numberLabel)
+        self.cardInfoStackView.addArrangedSubview(expireLabel)
+        self.bottomView.addSubview(cardInfoStackView)
+        self.bottomView.addSubview(viewForCardImg)
+        self.viewForCardImg.addSubview(cardImage)
     }
     
     private func setCellConstraints() {
         
-        backgroundImage.snp.makeConstraints { make in
+        cellView.snp.makeConstraints { make in
             make.top.equalTo(self.contentView.snp.top)
             make.leading.equalTo(self.contentView.snp.leading)
             make.trailing.equalTo(self.contentView.snp.trailing)
-            make.bottom.equalTo(self.contentView.snp.bottom)
             make.height.equalTo(202)
         }
-        // ------ Top View ------
-//        topView.snp.makeConstraints { make in
-//            make.top.equalTo(self.backgroundImage.snp.top).offset(16)
-//            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
-//            make.height.equalTo(58)
-//        }
-//
-//        balanceLabel.snp.makeConstraints { make in
-//            make.top.equalTo(self.topView.snp.top)
-//            make.leading.equalTo(self.topView.snp.leading)
-//            make.trailing.equalTo(self.topView.snp.trailing)
-//            make.height.equalTo(32)
-//        }
-//
-//        topStackView.snp.makeConstraints { make in
-//            make.top.equalTo(self.balanceLabel.snp.bottom).offset(8)
-//            make.leading.equalTo(self.topView.snp.leading)
-//            make.bottom.equalTo(self.topView.snp.bottom)
-//        }
-//
-//        // ----- Bottom View -----
-//        bottomView.snp.makeConstraints { make in
-//            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
-//            make.trailing.equalTo(self.backgroundImage.snp.trailing).offset(-20)
-//            make.bottom.equalTo(self.backgroundImage.snp.bottom).offset(-16)
-//            make.height.equalTo(40)
-//        }
-//
-//        cardInfoStackView.snp.makeConstraints { make in
-//            make.leading.equalTo(self.bottomView.snp.leading)
-//            make.bottom.equalTo(self.bottomView.snp.bottom)
-//        }
         
-//        cardImage.snp.makeConstraints { make in
-//            make.trailing.equalTo(self.bottomView.snp.trailing)
-//            make.size.equalTo(CGSize(width: 34, height: 38))
-//        }
+        backgroundImage.snp.makeConstraints { make in
+            make.top.equalTo(self.cellView.snp.top)
+            make.leading.equalTo(self.cellView.snp.leading)
+            make.trailing.equalTo(self.cellView.snp.trailing)
+            make.bottom.equalTo(self.cellView.snp.bottom)
+            make.width.equalTo(self.cellView.snp.width)
+            make.height.equalTo(self.cellView.snp.height)
+        }
+        // ------ Top View ------
+        topView.snp.makeConstraints { make in
+            make.top.equalTo(self.backgroundImage.snp.top).offset(16)
+            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
+            make.height.equalTo(58)
+        }
+
+        balanceLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.topView.snp.top)
+            make.leading.equalTo(self.topView.snp.leading)
+            make.trailing.equalTo(self.topView.snp.trailing)
+            make.height.equalTo(32)
+        }
+
+        topStackView.snp.makeConstraints { make in
+            make.leading.equalTo(self.topView.snp.leading)
+            make.trailing.equalTo(self.topView.snp.trailing)
+            make.bottom.equalTo(self.topView.snp.bottom)
+//            make.width.equalTo(120)
+        }
+        
+        penImg.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: 16, height: 16))
+        }
+
+        // ----- Bottom View -----
+        bottomView.snp.makeConstraints { make in
+            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
+            make.trailing.equalTo(self.backgroundImage.snp.trailing).offset(-20)
+            make.bottom.equalTo(self.backgroundImage.snp.bottom).offset(-16)
+            make.height.equalTo(40)
+        }
+
+        cardInfoStackView.snp.makeConstraints { make in
+            make.leading.equalTo(self.bottomView.snp.leading)
+            make.bottom.equalTo(self.bottomView.snp.bottom)
+        }
+        
+        viewForCardImg.snp.makeConstraints { make in
+            make.top.equalTo(self.bottomView.snp.top)
+            make.trailing.equalTo(self.bottomView.snp.trailing)
+            make.bottom.equalTo(self.bottomView.snp.bottom)
+            make.size.equalTo(CGSize(width: 108, height: 40))
+        }
+        
+        cardImage.snp.makeConstraints { make in
+            make.top.equalTo(self.viewForCardImg.snp.top).offset(1)
+            make.trailing.equalTo(self.viewForCardImg.snp.trailing).offset(-4)
+            make.bottom.equalTo(self.viewForCardImg.snp.bottom).offset(-1)
+            make.size.equalTo(CGSize(width: 33, height: 38))
+        }
     }
 }
