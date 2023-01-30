@@ -1,7 +1,27 @@
 import UIKit
 import SnapKit
 
-class CardsViewController: UIViewController {
+struct Colors {
+    static let redLight = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 1.0)
+    static let blueLight = UIColor(red: 51/255, green: 133/255, blue: 255/255, alpha: 1.0)
+}
+
+struct DisplayItem {
+    var backImgUrl: String?
+    var balance: String?
+    var cardName: String?
+    var penImgUrl: String?
+    var numLabel: String?
+    var dateLabel: String?
+    var paymentImgUrl: String?
+//    var isActive: Bool = true
+}
+
+final class CardsViewController: UIViewController {
+    
+    let cards = [
+        DisplayItem(backImgUrl: "small_3_img", balance: nil, cardName: nil, penImgUrl: nil, numLabel: nil, dateLabel: nil, paymentImgUrl: nil)
+    ]
     
     private let cardsLabel: UILabel = {
         let label = UILabel()
@@ -59,9 +79,10 @@ class CardsViewController: UIViewController {
             make.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
             make.size.equalTo(CGSize(width: 24, height: 24))
         }
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(self.cardsLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
@@ -72,7 +93,7 @@ class CardsViewController: UIViewController {
 extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return cards.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,7 +101,8 @@ extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.textLabel?.text = "Hello"
+        cell.displayItem = cards[indexPath.row]
+        cell.layer.cornerRadius = 12
         return cell
     }
 }
