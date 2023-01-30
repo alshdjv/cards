@@ -16,6 +16,13 @@ class CardsViewController: UIViewController {
         button.setImage(image, for: .normal)
         return button
     }()
+    
+    private var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(CardsCollectionViewCell.self, forCellWithReuseIdentifier: CardsCollectionViewCell.identifier)
+        return collectionView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +34,7 @@ class CardsViewController: UIViewController {
     private func setupControllerUI() {
         self.view.addSubview(cardsLabel)
         self.view.addSubview(subtractButton)
+        self.view.addSubview(collectionView)
         
         self.setConstraints()
     }
@@ -42,6 +50,12 @@ class CardsViewController: UIViewController {
             make.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
             make.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
             make.size.equalTo(CGSize(width: 24, height: 24))
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.cardsLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
     
