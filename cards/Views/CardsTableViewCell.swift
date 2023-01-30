@@ -1,12 +1,16 @@
 import UIKit
 import SnapKit
 
-class CardsCollectionViewCell: UICollectionViewCell {
+class CardsTableViewCell: UITableViewCell {
 
-    static let identifier = "CardsCollectionViewCell"
+    static let identifier = "CardsTableViewCell"
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        if self.selectedBackgroundView == nil {
+            self.selectedBackgroundView = UIView()
+        }
     }
     
     required init?(coder: NSCoder) {

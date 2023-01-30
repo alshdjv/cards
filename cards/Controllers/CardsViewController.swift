@@ -17,24 +17,32 @@ class CardsViewController: UIViewController {
         return button
     }()
     
-    private var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(CardsCollectionViewCell.self, forCellWithReuseIdentifier: CardsCollectionViewCell.identifier)
-        return collectionView
+    private var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(CardsTableViewCell.self, forCellReuseIdentifier: CardsTableViewCell.identifier)
+        return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
+        self.setupTableView()
         self.setupControllerUI()
+    }
+    
+    private func setupTableView() {
+        tableView.separatorStyle = .none
+        tableView.separatorColor = .clear
+        tableView.showsVerticalScrollIndicator = false
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
     }
     
     private func setupControllerUI() {
         self.view.addSubview(cardsLabel)
         self.view.addSubview(subtractButton)
-        self.view.addSubview(collectionView)
+        self.view.addSubview(tableView)
         
         self.setConstraints()
     }
@@ -51,13 +59,28 @@ class CardsViewController: UIViewController {
             make.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
             make.size.equalTo(CGSize(width: 24, height: 24))
         }
-        
-        collectionView.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.top.equalTo(self.cardsLabel.snp.bottom).offset(16)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
-    
 }
 
+// MARK: - Extensions for Controller
+
+extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CardsTableViewCell.identifier, for: indexPath) as? CardsTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        cell.textLabel?.text = "Hello"
+        return cell
+    }
+}
