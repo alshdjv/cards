@@ -45,18 +45,6 @@ final class CardsTableViewCell: UITableViewCell {
             }
         }
     
-    // Methods
-    public func configure(state: ChainImageState) {
-        switch state {
-        case .inactiveCard:
-            warningView.isHidden = false
-            alphaView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-        case .activeCard:
-            warningView.isHidden = true
-            alphaView.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
-        }
-    }
-    
     // MARK: - Properties of Cell
     
     private let cellView: UIView = {
@@ -71,12 +59,6 @@ final class CardsTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 12
         imageView.layer.borderWidth = 1
         return imageView
-    }()
-    
-    /// - Top View, Alias & Icon stackView inside TopView
-    private let topView: UIView = {
-        let view = UIView()
-        return view
     }()
     
     private let balanceLabel: UILabel = {
@@ -97,17 +79,6 @@ final class CardsTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
-    }()
-    
-    private let groupView: UIView = {
-        let view = UIView()
-        return view
-    }()
-    
-    /// - Bottom View
-    private let bottomView: UIView = {
-        let view = UIView()
-        return view
     }()
     
     private let numberLabel: UILabel = {
@@ -195,19 +166,16 @@ final class CardsTableViewCell: UITableViewCell {
     private func setupViews() {
         self.contentView.addSubview(cellView)
         self.cellView.addSubview(backgroundImg)
-        self.backgroundImg.addSubview(topView)
-        self.topView.addSubview(balanceLabel)
-        self.topView.addSubview(groupView)
-        self.groupView.addSubview(aliasLabel)
-        self.groupView.addSubview(penImg)
+        self.cellView.addSubview(balanceLabel)
+        self.cellView.addSubview(aliasLabel)
+        self.cellView.addSubview(penImg)
         
-        self.backgroundImg.addSubview(bottomView)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
-        self.bottomView.addSubview(cardInfoStackView)
-        self.bottomView.addSubview(cardImage)
+        self.cellView.addSubview(cardInfoStackView)
+        self.cellView.addSubview(cardImage)
         
-        self.backgroundImg.addSubview(alphaView)
+        self.cellView.addSubview(alphaView)
         
         self.cellView.addSubview(warningView)
         self.warningView.addSubview(exlamationImage)
@@ -231,54 +199,32 @@ final class CardsTableViewCell: UITableViewCell {
             make.width.equalTo(self.cellView.snp.width)
             make.height.equalTo(self.cellView.snp.height)
         }
-        // ------ Top View ------
-        topView.snp.makeConstraints { make in
-            make.top.equalTo(self.backgroundImg.snp.top).offset(16)
-            make.leading.equalTo(self.backgroundImg.snp.leading).offset(20)
-            make.height.equalTo(58)
-        }
 
         balanceLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.topView.snp.top)
-            make.leading.equalTo(self.topView.snp.leading)
-            make.trailing.equalTo(self.topView.snp.trailing)
+            make.top.equalTo(self.cellView.snp.top).offset(16)
+            make.leading.equalTo(self.cellView.snp.leading).offset(20)
             make.height.equalTo(32)
-        }
-
-        groupView.snp.makeConstraints { make in
-            make.leading.equalTo(self.topView.snp.leading)
-            make.trailing.equalTo(self.topView.snp.trailing)
-            make.bottom.equalTo(self.topView.snp.bottom)
         }
         
         aliasLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.groupView.snp.top)
-            make.leading.equalTo(self.groupView.snp.leading)
+            make.top.equalTo(self.balanceLabel.snp.bottom).offset(8)
+            make.leading.equalTo(self.balanceLabel.snp.leading)
         }
         
         penImg.snp.makeConstraints { make in
-            make.top.equalTo(self.groupView.snp.top)
+            make.top.equalTo(self.balanceLabel.snp.bottom).offset(8)
             make.leading.equalTo(self.aliasLabel.snp.trailing).offset(8)
             make.size.equalTo(CGSize(width: 16, height: 16))
         }
 
-        // ----- Bottom View -----
-        bottomView.snp.makeConstraints { make in
-            make.leading.equalTo(self.backgroundImg.snp.leading).offset(20)
-            make.trailing.equalTo(self.backgroundImg.snp.trailing).offset(-20)
-            make.bottom.equalTo(self.backgroundImg.snp.bottom).offset(-16)
-            make.height.equalTo(40)
-        }
-
         cardInfoStackView.snp.makeConstraints { make in
-            make.leading.equalTo(self.bottomView.snp.leading)
-            make.bottom.equalTo(self.bottomView.snp.bottom)
+            make.leading.equalTo(self.cellView.snp.leading).offset(20)
+            make.bottom.equalTo(self.cellView.snp.bottom).offset(-16)
         }
         
         cardImage.snp.makeConstraints { make in
-            make.top.equalTo(self.bottomView.snp.top).offset(1)
-            make.trailing.equalTo(self.bottomView.snp.trailing).offset(-4)
-            make.bottom.equalTo(self.bottomView.snp.bottom).offset(-1)
+            make.trailing.equalTo(self.cellView.snp.trailing).offset(-24)
+            make.bottom.equalTo(self.cellView.snp.bottom).offset(-17)
             make.size.equalTo(CGSize(width: 33, height: 38))
         }
         
@@ -308,6 +254,19 @@ final class CardsTableViewCell: UITableViewCell {
             make.top.equalTo(self.warningView.snp.top).offset(8)
             make.leading.equalTo(self.exlamationImage.snp.trailing).offset(8)
             make.bottom.equalTo(self.warningView.snp.bottom).offset(-8)
+        }
+    }
+    
+    // MARK: - Methods
+    
+    public func configure(state: ChainImageState) {
+        switch state {
+        case .inactiveCard:
+            warningView.isHidden = false
+            alphaView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        case .activeCard:
+            warningView.isHidden = true
+            alphaView.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
         }
     }
 }
