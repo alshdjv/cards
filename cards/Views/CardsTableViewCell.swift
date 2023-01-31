@@ -118,16 +118,18 @@ final class CardsTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    private let viewForCardImg: UIView = {
-        let view = UIView()
-        return view
-    }()
-    
     private let cardImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFit
         return imageView
+    }()
+    
+    /// Alpha View
+    private let alphaView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
+        return view
     }()
     
     // MARK: - Init Cell
@@ -166,8 +168,9 @@ final class CardsTableViewCell: UITableViewCell {
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
         self.bottomView.addSubview(cardInfoStackView)
-        self.bottomView.addSubview(viewForCardImg)
-        self.viewForCardImg.addSubview(cardImage)
+        self.bottomView.addSubview(cardImage)
+        
+        self.backgroundImage.addSubview(alphaView)
     }
     
     private func setCellConstraints() {
@@ -225,18 +228,19 @@ final class CardsTableViewCell: UITableViewCell {
             make.bottom.equalTo(self.bottomView.snp.bottom)
         }
         
-        viewForCardImg.snp.makeConstraints { make in
-            make.top.equalTo(self.bottomView.snp.top)
-            make.trailing.equalTo(self.bottomView.snp.trailing)
-            make.bottom.equalTo(self.bottomView.snp.bottom)
-            make.size.equalTo(CGSize(width: 108, height: 40))
+        cardImage.snp.makeConstraints { make in
+            make.top.equalTo(self.bottomView.snp.top).offset(1)
+            make.trailing.equalTo(self.bottomView.snp.trailing).offset(-4)
+            make.bottom.equalTo(self.bottomView.snp.bottom).offset(-1)
+            make.size.equalTo(CGSize(width: 33, height: 38))
         }
         
-        cardImage.snp.makeConstraints { make in
-            make.top.equalTo(self.viewForCardImg.snp.top).offset(1)
-            make.trailing.equalTo(self.viewForCardImg.snp.trailing).offset(-4)
-            make.bottom.equalTo(self.viewForCardImg.snp.bottom).offset(-1)
-            make.size.equalTo(CGSize(width: 33, height: 38))
+        // ----- Alpha View -----
+        alphaView.snp.makeConstraints { make in
+            make.top.equalTo(self.backgroundImage.snp.top)
+            make.leading.equalTo(self.backgroundImage.snp.leading)
+            make.trailing.equalTo(self.backgroundImage.snp.trailing)
+            make.bottom.equalTo(self.backgroundImage.snp.bottom)
         }
     }
 }
