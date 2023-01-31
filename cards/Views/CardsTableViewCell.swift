@@ -55,7 +55,7 @@ final class CardsTableViewCell: UITableViewCell {
     private let backgroundImg: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         imageView.layer.borderWidth = 1
         return imageView
@@ -144,6 +144,7 @@ final class CardsTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.backgroundColor = .systemBackground
         
         if self.selectedBackgroundView == nil {
             self.selectedBackgroundView = UIView()
@@ -188,7 +189,7 @@ final class CardsTableViewCell: UITableViewCell {
             make.top.equalTo(self.contentView.snp.top)
             make.leading.equalTo(self.contentView.snp.leading)
             make.trailing.equalTo(self.contentView.snp.trailing)
-            make.height.equalTo(202)
+            make.height.equalTo(self.contentView.snp.width).multipliedBy(10.0 / 17.0)
         }
         
         backgroundImg.snp.makeConstraints { make in
@@ -196,8 +197,6 @@ final class CardsTableViewCell: UITableViewCell {
             make.leading.equalTo(self.cellView.snp.leading)
             make.trailing.equalTo(self.cellView.snp.trailing)
             make.bottom.equalTo(self.cellView.snp.bottom)
-            make.width.equalTo(self.cellView.snp.width)
-            make.height.equalTo(self.cellView.snp.height)
         }
 
         balanceLabel.snp.makeConstraints { make in
