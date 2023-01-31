@@ -1,6 +1,11 @@
 import UIKit
 import SnapKit
 
+enum ChainImageState {
+    case inactiveCard
+    case activeCard
+}
+
 final class CardsTableViewCell: UITableViewCell {
 
     static let identifier = "CardsTableViewCell"
@@ -11,7 +16,7 @@ final class CardsTableViewCell: UITableViewCell {
                 guard let displayItem = displayItem else {return}
                 
                 if let backImgUrl = displayItem.backImgUrl {
-                    backgroundImage.image = UIImage(named: backImgUrl)
+                    backgroundImg.image = UIImage(named: backImgUrl)
                 }
                 
                 if let balance = displayItem.balance {
@@ -40,6 +45,18 @@ final class CardsTableViewCell: UITableViewCell {
             }
         }
     
+    // Methods
+    public func configure(state: ChainImageState) {
+        switch state {
+        case .inactiveCard:
+            warningView.isHidden = false
+            alphaView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        case .activeCard:
+            warningView.isHidden = true
+            alphaView.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
+        }
+    }
+    
     // MARK: - Properties of Cell
     
     private let cellView: UIView = {
@@ -47,7 +64,7 @@ final class CardsTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let backgroundImage: UIImageView = {
+    private let backgroundImg: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
@@ -64,7 +81,7 @@ final class CardsTableViewCell: UITableViewCell {
     
     private let balanceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 24, weight: .semibold)
         label.textColor = .white
         return label
     }()
@@ -125,8 +142,31 @@ final class CardsTableViewCell: UITableViewCell {
     /// Alpha View
     private let alphaView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
         return view
+    }()
+    
+    /// ------ If Card is inActive ------
+    private let warningView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Colors.redLight
+        view.layer.cornerRadius = 4
+        view.layer.isHidden = true
+        return view
+    }()
+    
+    private let activeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Подключите СМС информирование"
+        label.font = .systemFont(ofSize: 13)
+        label.textColor = .white
+        return label
+    }()
+    
+    private let exlamationImage: UIImageView = {
+        let image = UIImage(named: "exclamation_img")
+        let imageView = UIImageView(image: image?.withRenderingMode(.alwaysOriginal))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
     
     // MARK: - Init Cell
@@ -154,20 +194,24 @@ final class CardsTableViewCell: UITableViewCell {
     
     private func setupViews() {
         self.contentView.addSubview(cellView)
-        self.cellView.addSubview(backgroundImage)
-        self.backgroundImage.addSubview(topView)
+        self.cellView.addSubview(backgroundImg)
+        self.backgroundImg.addSubview(topView)
         self.topView.addSubview(balanceLabel)
         self.topView.addSubview(groupView)
         self.groupView.addSubview(aliasLabel)
         self.groupView.addSubview(penImg)
         
-        self.backgroundImage.addSubview(bottomView)
+        self.backgroundImg.addSubview(bottomView)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
         self.bottomView.addSubview(cardInfoStackView)
         self.bottomView.addSubview(cardImage)
         
-        self.backgroundImage.addSubview(alphaView)
+        self.backgroundImg.addSubview(alphaView)
+        
+        self.cellView.addSubview(warningView)
+        self.warningView.addSubview(exlamationImage)
+        self.warningView.addSubview(activeLabel)
     }
     
     private func setCellConstraints() {
@@ -179,7 +223,7 @@ final class CardsTableViewCell: UITableViewCell {
             make.height.equalTo(202)
         }
         
-        backgroundImage.snp.makeConstraints { make in
+        backgroundImg.snp.makeConstraints { make in
             make.top.equalTo(self.cellView.snp.top)
             make.leading.equalTo(self.cellView.snp.leading)
             make.trailing.equalTo(self.cellView.snp.trailing)
@@ -189,8 +233,8 @@ final class CardsTableViewCell: UITableViewCell {
         }
         // ------ Top View ------
         topView.snp.makeConstraints { make in
-            make.top.equalTo(self.backgroundImage.snp.top).offset(16)
-            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
+            make.top.equalTo(self.backgroundImg.snp.top).offset(16)
+            make.leading.equalTo(self.backgroundImg.snp.leading).offset(20)
             make.height.equalTo(58)
         }
 
@@ -213,15 +257,16 @@ final class CardsTableViewCell: UITableViewCell {
         }
         
         penImg.snp.makeConstraints { make in
+            make.top.equalTo(self.groupView.snp.top)
             make.leading.equalTo(self.aliasLabel.snp.trailing).offset(8)
             make.size.equalTo(CGSize(width: 16, height: 16))
         }
 
         // ----- Bottom View -----
         bottomView.snp.makeConstraints { make in
-            make.leading.equalTo(self.backgroundImage.snp.leading).offset(20)
-            make.trailing.equalTo(self.backgroundImage.snp.trailing).offset(-20)
-            make.bottom.equalTo(self.backgroundImage.snp.bottom).offset(-16)
+            make.leading.equalTo(self.backgroundImg.snp.leading).offset(20)
+            make.trailing.equalTo(self.backgroundImg.snp.trailing).offset(-20)
+            make.bottom.equalTo(self.backgroundImg.snp.bottom).offset(-16)
             make.height.equalTo(40)
         }
 
@@ -239,10 +284,30 @@ final class CardsTableViewCell: UITableViewCell {
         
         // ----- Alpha View -----
         alphaView.snp.makeConstraints { make in
-            make.top.equalTo(self.backgroundImage.snp.top)
-            make.leading.equalTo(self.backgroundImage.snp.leading)
-            make.trailing.equalTo(self.backgroundImage.snp.trailing)
-            make.bottom.equalTo(self.backgroundImage.snp.bottom)
+            make.top.equalTo(self.backgroundImg.snp.top)
+            make.leading.equalTo(self.backgroundImg.snp.leading)
+            make.trailing.equalTo(self.backgroundImg.snp.trailing)
+            make.bottom.equalTo(self.backgroundImg.snp.bottom)
+        }
+        
+        // ----- No active cards -----
+        warningView.snp.makeConstraints { make in
+            make.top.equalTo(self.cellView.snp.top).offset(16)
+            make.leading.equalTo(self.cellView.snp.leading).offset(20)
+            make.trailing.equalTo(self.cellView.snp.trailing).offset(-20)
+        }
+        
+        exlamationImage.snp.makeConstraints { make in
+            make.top.equalTo(self.warningView.snp.top).offset(8)
+            make.leading.equalTo(self.warningView.snp.leading).offset(8)
+            make.bottom.equalTo(self.warningView.snp.bottom).offset(-8)
+            make.size.equalTo(CGSize(width: 16, height: 16))
+        }
+        
+        activeLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.warningView.snp.top).offset(8)
+            make.leading.equalTo(self.exlamationImage.snp.trailing).offset(8)
+            make.bottom.equalTo(self.warningView.snp.bottom).offset(-8)
         }
     }
 }

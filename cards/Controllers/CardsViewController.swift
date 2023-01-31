@@ -14,7 +14,6 @@ struct DisplayItem {
     var numLabel: String?
     var dateLabel: String?
     var paymentImgUrl: String?
-//    var isActive: Bool = true
 }
 
 final class CardsViewController: UIViewController {
@@ -105,6 +104,7 @@ extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.displayItem = cards[indexPath.row]
+        cell.configure(state: .activeCard)
         cell.layer.cornerRadius = 12
         return cell
     }
