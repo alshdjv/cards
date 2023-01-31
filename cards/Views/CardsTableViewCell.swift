@@ -82,12 +82,9 @@ final class CardsTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let topStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-//        stackView.distribution = .fill
-        stackView.spacing = 8
-        return stackView
+    private let groupView: UIView = {
+        let view = UIView()
+        return view
     }()
     
     /// - Bottom View
@@ -160,9 +157,9 @@ final class CardsTableViewCell: UITableViewCell {
         self.cellView.addSubview(backgroundImage)
         self.backgroundImage.addSubview(topView)
         self.topView.addSubview(balanceLabel)
-        self.topStackView.addArrangedSubview(aliasLabel)
-        self.topStackView.addArrangedSubview(penImg)
-        self.topView.addSubview(topStackView)
+        self.topView.addSubview(groupView)
+        self.groupView.addSubview(aliasLabel)
+        self.groupView.addSubview(penImg)
         
         self.backgroundImage.addSubview(bottomView)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
@@ -204,14 +201,19 @@ final class CardsTableViewCell: UITableViewCell {
             make.height.equalTo(32)
         }
 
-        topStackView.snp.makeConstraints { make in
+        groupView.snp.makeConstraints { make in
             make.leading.equalTo(self.topView.snp.leading)
             make.trailing.equalTo(self.topView.snp.trailing)
             make.bottom.equalTo(self.topView.snp.bottom)
-//            make.width.equalTo(120)
+        }
+        
+        aliasLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.groupView.snp.top)
+            make.leading.equalTo(self.groupView.snp.leading)
         }
         
         penImg.snp.makeConstraints { make in
+            make.leading.equalTo(self.aliasLabel.snp.trailing).offset(8)
             make.size.equalTo(CGSize(width: 16, height: 16))
         }
 

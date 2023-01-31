@@ -23,7 +23,7 @@ final class CardsViewController: UIViewController {
         DisplayItem(backImgUrl: "small_3_img", balance: "73232 СУМ", cardName: "Рабочая карта", penImgUrl: "pen_img", numLabel: "..2341", dateLabel: "09/23", paymentImgUrl: "uzcard_img"),
         DisplayItem(backImgUrl: "small_4_img", balance: "13532 СУМ", cardName: "Не рабочая карта", penImgUrl: "pen_img", numLabel: "..2341", dateLabel: "06/25", paymentImgUrl: "humo_img"),
         DisplayItem(backImgUrl: "small_2_img", balance: "24532000 СУМ", cardName: "рабочая карта", penImgUrl: "pen_img", numLabel: "..1441", dateLabel: "12/19", paymentImgUrl: "uzcard_img"),
-        DisplayItem(backImgUrl: "small_1_img", balance: "1000000000 СУМ", cardName: "Не рабочая карта", penImgUrl: "pen_img", numLabel: "..6666", dateLabel: "03/15", paymentImgUrl: "humo_img"),
+        DisplayItem(backImgUrl: "small_1_img", balance: "1000000000 СУМ", cardName: "Не рабочая карта", penImgUrl: "pen_img", numLabel: "8880 3129 4422 6666", dateLabel: "03/15", paymentImgUrl: "humo_img"),
     ]
     
     private let cardsLabel: UILabel = {
