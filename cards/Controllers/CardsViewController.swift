@@ -103,18 +103,21 @@ extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+        cell.delegate = self
+        
         cell.displayItem = cards[indexPath.row]
-        cell.configure(state: .activeCard)
+        cell.configure(state: .inactiveCard)
         cell.layer.cornerRadius = 12
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let editVC = CardsEditViewController()
-        self.navigationController?.pushViewController(editVC, animated: true)
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 226
+    }
+}
+
+extension CardsViewController: CardTableViewCellDidTapCell {
+    func cardTableViewCellDidTapCellController(_ viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

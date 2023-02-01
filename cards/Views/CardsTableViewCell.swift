@@ -1,6 +1,10 @@
 import UIKit
 import SnapKit
 
+protocol CardTableViewCellDidTapCell: AnyObject {
+    func cardTableViewCellDidTapCellController(_ viewController: UIViewController)
+}
+
 enum ChainImageState {
     case inactiveCard
     case activeCard
@@ -9,6 +13,10 @@ enum ChainImageState {
 final class CardsTableViewCell: UITableViewCell {
 
     static let identifier = "CardsTableViewCell"
+    
+    public weak var delegate: CardTableViewCellDidTapCell?
+    
+    var id: Int = 0
     
     // Observers
         var displayItem: DisplayItem? {
@@ -81,6 +89,15 @@ final class CardsTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private let pushButton: UIButton = {
+        let button = UIButton(type: .custom)
+        return button
+    }()
+    
+    @objc func pushButtonTapped(_ sender: AnyObject) {
+        self.delegate?.cardTableViewCellDidTapCellController(CardsEditViewController())
+    }
+    
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
@@ -113,6 +130,7 @@ final class CardsTableViewCell: UITableViewCell {
     /// Alpha View
     private let alphaView: UIView = {
         let view = UIView()
+        view.isHidden = true
         return view
     }()
     
@@ -171,6 +189,9 @@ final class CardsTableViewCell: UITableViewCell {
         self.cellView.addSubview(aliasLabel)
         self.cellView.addSubview(penImg)
         
+        self.cellView.addSubview(pushButton)
+        pushButton.addTarget(self, action: #selector(pushButtonTapped), for: .touchUpInside)
+        
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
         self.cellView.addSubview(cardInfoStackView)
@@ -215,6 +236,15 @@ final class CardsTableViewCell: UITableViewCell {
             make.leading.equalTo(self.aliasLabel.snp.trailing).offset(8)
             make.size.equalTo(CGSize(width: 16, height: 16))
         }
+        
+        pushButton.snp.makeConstraints { make in
+            make.top.equalTo(self.penImg.snp.top)
+            make.leading.equalTo(self.penImg.snp.leading)
+            make.trailing.equalTo(self.penImg.snp.trailing)
+            make.bottom.equalTo(self.penImg.snp.bottom)
+            make.width.equalTo(self.penImg.snp.width)
+            make.height.equalTo(self.penImg.snp.height)
+        }
 
         cardInfoStackView.snp.makeConstraints { make in
             make.leading.equalTo(self.cellView.snp.leading).offset(20)
@@ -229,10 +259,10 @@ final class CardsTableViewCell: UITableViewCell {
         
         // ----- Alpha View -----
         alphaView.snp.makeConstraints { make in
-            make.top.equalTo(self.backgroundImg.snp.top)
-            make.leading.equalTo(self.backgroundImg.snp.leading)
-            make.trailing.equalTo(self.backgroundImg.snp.trailing)
-            make.bottom.equalTo(self.backgroundImg.snp.bottom)
+            make.top.equalTo(self.cellView.snp.top)
+            make.leading.equalTo(self.cellView.snp.leading)
+            make.trailing.equalTo(self.cellView.snp.trailing)
+            make.bottom.equalTo(self.cellView.snp.bottom)
         }
         
         // ----- No active cards -----
@@ -263,9 +293,11 @@ final class CardsTableViewCell: UITableViewCell {
         case .inactiveCard:
             warningView.isHidden = false
             alphaView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+            alphaView.isHidden = false
         case .activeCard:
             warningView.isHidden = true
             alphaView.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
+            alphaView.isHidden = true
         }
     }
 }
