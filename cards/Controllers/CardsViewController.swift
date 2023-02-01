@@ -83,7 +83,7 @@ final class CardsViewController: UIViewController {
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.cardsLabel.snp.bottom).offset(16)
+            make.top.equalTo(self.cardsLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -106,14 +106,14 @@ extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         
         cell.displayItem = cards[indexPath.row]
-        cell.configure(state: .inactiveCard)
+        cell.configure(state: .activeCard)
         cell.layer.cornerRadius = 12
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 226
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 226
+//    }
 }
 
 extension CardsViewController: CardTableViewCellDidTapCell {

@@ -16,8 +16,6 @@ final class CardsTableViewCell: UITableViewCell {
     
     public weak var delegate: CardTableViewCellDidTapCell?
     
-    var id: Int = 0
-    
     // Observers
         var displayItem: DisplayItem? {
             didSet {
@@ -131,6 +129,7 @@ final class CardsTableViewCell: UITableViewCell {
     private let alphaView: UIView = {
         let view = UIView()
         view.isHidden = true
+        view.layer.cornerRadius = 12
         return view
     }()
     
@@ -207,9 +206,8 @@ final class CardsTableViewCell: UITableViewCell {
     private func setCellConstraints() {
         
         cellView.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView.snp.top)
-            make.leading.equalTo(self.contentView.snp.leading)
-            make.trailing.equalTo(self.contentView.snp.trailing)
+            make.top.bottom.equalTo(self.contentView).inset(12).priority(.init(999))
+            make.leading.trailing.equalTo(self.contentView)
             make.height.equalTo(self.contentView.snp.width).multipliedBy(10.0 / 17.0)
         }
         
