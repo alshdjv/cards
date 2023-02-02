@@ -206,8 +206,9 @@ final class CardsTableViewCell: UITableViewCell {
     private func setCellConstraints() {
         
         cellView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.contentView).inset(12).priority(.init(999))
+            make.top.equalTo(self.contentView).inset(12)
             make.leading.trailing.equalTo(self.contentView)
+            make.bottom.equalTo(self.contentView).inset(12).priority(.init(999))
             make.height.equalTo(self.contentView.snp.width).multipliedBy(10.0 / 17.0)
         }
         
