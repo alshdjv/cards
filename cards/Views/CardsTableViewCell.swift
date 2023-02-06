@@ -16,41 +16,6 @@ final class CardsTableViewCell: UITableViewCell {
     
     public weak var delegate: CardTableViewCellDidTapCell?
     
-    // Observers
-        var displayItem: DisplayItem? {
-            didSet {
-                guard let displayItem = displayItem else {return}
-                
-                if let backImgUrl = displayItem.backImgUrl {
-                    backgroundImg.image = UIImage(named: backImgUrl)
-                }
-                
-                if let balance = displayItem.balance {
-                    balanceLabel.text = "\(balance)"
-                }
-                      
-                if let cardName = displayItem.cardName {
-                    aliasLabel.text = "\(cardName)"
-                }
-                
-                if let penImgUrl = displayItem.penImgUrl {
-                    penImg.image = UIImage(named: penImgUrl)?.withRenderingMode(.alwaysOriginal)
-                }
-                
-                if let numLabel = displayItem.numLabel {
-                    numberLabel.text = "\(numLabel)"
-                }
-                
-                if let dateLabel = displayItem.dateLabel {
-                    expireLabel.text = "\(dateLabel)"
-                }
-                
-                if let paymentImgUrl = displayItem.paymentImgUrl {
-                    cardImage.image = UIImage(named: paymentImgUrl)?.withRenderingMode(.alwaysOriginal)
-                }
-            }
-        }
-    
     // MARK: - Properties of Cell
     
     private let cellView: UIView = {
@@ -156,6 +121,41 @@ final class CardsTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+    
+    // Observers
+    var displayItem: DisplayItem? {
+        didSet {
+            guard let displayItem = displayItem else {return}
+                
+            if let backImgUrl = displayItem.backImgUrl {
+                backgroundImg.image = UIImage(named: backImgUrl)
+            }
+                
+            if let balance = displayItem.balance {
+                balanceLabel.text = "\(balance)"
+            }
+                      
+            if let cardName = displayItem.cardName {
+                aliasLabel.text = "\(cardName)"
+            }
+                
+            if let penImgUrl = displayItem.penImgUrl {
+                penImg.image = UIImage(named: penImgUrl)?.withRenderingMode(.alwaysOriginal)
+            }
+                
+            if let numLabel = displayItem.numLabel {
+                numberLabel.text = "\(numLabel)"
+            }
+                
+            if let dateLabel = displayItem.dateLabel {
+                expireLabel.text = "\(dateLabel)"
+            }
+                
+            if let paymentImgUrl = displayItem.paymentImgUrl {
+                cardImage.image = UIImage(named: paymentImgUrl)?.withRenderingMode(.alwaysOriginal)
+            }
+        }
+    }
     
     // MARK: - Init Cell
     
