@@ -1,10 +1,17 @@
 import UIKit
+import SnapKit
 
-class CardsEditViewController: UIViewController {
-
+final class CardsEditViewController: UIViewController {
+    
+    // Properties
+    
+    
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        self.title = "Hello Guest!"
+        
+        
     }
 }
