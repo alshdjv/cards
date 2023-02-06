@@ -252,8 +252,8 @@ final class CardsTableViewCell: UITableViewCell {
         
         cardImage.snp.makeConstraints { make in
             make.trailing.equalTo(self.cellView.snp.trailing).offset(-24)
-            make.bottom.equalTo(self.cellView.snp.bottom).offset(-17)
-            make.size.equalTo(CGSize(width: 33, height: 38))
+            make.bottom.equalTo(self.cellView.snp.bottom).offset(-16)
+            make.size.equalTo(CGSize(width: 40, height: 40))
         }
         
         // ----- Alpha View -----
