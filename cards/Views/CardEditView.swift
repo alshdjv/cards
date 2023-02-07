@@ -3,8 +3,8 @@ import SnapKit
 
 final class CardEditView: UIView {
     
-    // Properties
-    private let mainView: UIView = {
+    // Top Data
+    private let topView: UIView = {
         let view = UIView()
         return view
     }()
@@ -70,6 +70,27 @@ final class CardEditView: UIView {
         return view
     }()
     
+    // Middle Data
+    private let captionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Дизайн карты"
+        label.textColor = UIColor(red: 170/255, green: 171/255, blue: 173/255, alpha: 1.0)
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        return label
+    }()
+    
+    private let saveBtn: UIButton = {
+        let button = UIButton()
+        let btnTitle = "Сохранить"
+        button.setTitle(btnTitle, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        button.backgroundColor = Colors.blueLight
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        return button
+    }()
+    
     // Observers
     var displayEditItem: DisplayItem? {
         didSet {
@@ -106,7 +127,7 @@ final class CardEditView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .systemBackground
-        
+       
         self.setupViewUI()
     }
     
@@ -122,20 +143,23 @@ final class CardEditView: UIView {
     }
     
     private func setupViews() {
-        self.addSubview(mainView)
-        self.mainView.addSubview(backgroundImgView)
-        self.mainView.addSubview(balanceLabel)
+        self.addSubview(topView)
+        self.topView.addSubview(backgroundImgView)
+        self.topView.addSubview(balanceLabel)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
-        self.mainView.addSubview(cardInfoStackView)
-        self.mainView.addSubview(cardImage)
-        self.mainView.addSubview(alphaView)
-        self.mainView.addSubview(aliasTextField)
+        self.topView.addSubview(cardInfoStackView)
+        self.topView.addSubview(cardImage)
+        self.topView.addSubview(alphaView)
+        self.topView.addSubview(aliasTextField)
+        
+        self.addSubview(captionLabel)
+        self.addSubview(saveBtn)
     }
     
     private func setViewConstraints() {
         
-        mainView.snp.makeConstraints { make in
+        topView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(8)
             make.leading.equalTo(self.snp.leading).offset(16)
             make.trailing.equalTo(self.snp.trailing).offset(-16)
@@ -143,40 +167,53 @@ final class CardEditView: UIView {
         }
         
         backgroundImgView.snp.makeConstraints { make in
-            make.top.equalTo(self.mainView.snp.top)
-            make.leading.equalTo(self.mainView.snp.leading)
-            make.trailing.equalTo(self.mainView.snp.trailing)
-            make.bottom.equalTo(self.mainView.snp.bottom)
+            make.top.equalTo(self.topView.snp.top)
+            make.leading.equalTo(self.topView.snp.leading)
+            make.trailing.equalTo(self.topView.snp.trailing)
+            make.bottom.equalTo(self.topView.snp.bottom)
         }
         
         balanceLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.mainView.snp.top).offset(16)
-            make.leading.equalTo(self.mainView.snp.leading).offset(20)
+            make.top.equalTo(self.topView.snp.top).offset(16)
+            make.leading.equalTo(self.topView.snp.leading).offset(20)
             make.height.equalTo(32)
         }
         
         cardInfoStackView.snp.makeConstraints { make in
-            make.leading.equalTo(self.mainView.snp.leading).offset(20)
-            make.bottom.equalTo(self.mainView.snp.bottom).offset(-16)
+            make.leading.equalTo(self.topView.snp.leading).offset(20)
+            make.bottom.equalTo(self.topView.snp.bottom).offset(-16)
         }
         
         cardImage.snp.makeConstraints { make in
-            make.trailing.equalTo(self.mainView.snp.trailing).offset(-24)
-            make.bottom.equalTo(self.mainView.snp.bottom).offset(-16)
+            make.trailing.equalTo(self.topView.snp.trailing).offset(-24)
+            make.bottom.equalTo(self.topView.snp.bottom).offset(-16)
             make.size.equalTo(CGSize(width: 40, height: 40))
         }
         
         // ----- Alpha View -----
         alphaView.snp.makeConstraints { make in
-            make.top.equalTo(self.mainView.snp.top)
-            make.leading.equalTo(self.mainView.snp.leading)
-            make.trailing.equalTo(self.mainView.snp.trailing)
-            make.bottom.equalTo(self.mainView.snp.bottom)
+            make.top.equalTo(self.topView.snp.top)
+            make.leading.equalTo(self.topView.snp.leading)
+            make.trailing.equalTo(self.topView.snp.trailing)
+            make.bottom.equalTo(self.topView.snp.bottom)
         }
         
         aliasTextField.snp.makeConstraints { make in
             make.top.equalTo(self.balanceLabel.snp.bottom).offset(8)
             make.leading.equalTo(self.balanceLabel.snp.leading)
+        }
+        
+        // Middle Content
+        captionLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.backgroundImgView.snp.bottom).offset(32)
+            make.leading.equalTo(self.snp.leading).offset(16)
+        }
+        
+        saveBtn.snp.makeConstraints { make in
+            make.leading.equalTo(self.snp.leading).offset(16)
+            make.trailing.equalTo(self.snp.trailing).offset(-16)
+            make.bottom.equalTo(self.snp.bottom).offset(-55)
+            make.height.equalTo(44)
         }
     }
     
