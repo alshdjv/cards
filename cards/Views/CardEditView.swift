@@ -4,6 +4,16 @@ import SnapKit
 final class CardEditView: UIView {
     
     // Top Data
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let topView: UIView = {
         let view = UIView()
         return view
@@ -143,7 +153,9 @@ final class CardEditView: UIView {
     }
     
     private func setupViews() {
-        self.addSubview(topView)
+        self.addSubview(scrollView)
+        self.scrollView.addSubview(contentView)
+        self.contentView.addSubview(topView)
         self.topView.addSubview(backgroundImgView)
         self.topView.addSubview(balanceLabel)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
@@ -153,11 +165,27 @@ final class CardEditView: UIView {
         self.topView.addSubview(alphaView)
         self.topView.addSubview(aliasTextField)
         
-        self.addSubview(captionLabel)
-        self.addSubview(saveBtn)
+        self.contentView.addSubview(captionLabel)
+        self.contentView.addSubview(saveBtn)
     }
     
     private func setViewConstraints() {
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.top)
+            make.leading.equalTo(self.snp.leading)
+            make.trailing.equalTo(self.snp.trailing)
+            make.bottom.equalTo(self.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.top)
+            make.leading.equalTo(self.snp.leading)
+            make.trailing.equalTo(self.snp.trailing)
+            make.bottom.equalTo(self.snp.bottom).priority(250)
+            make.centerX.equalTo(self.snp.centerX)
+            make.centerY.equalTo(self.snp.centerY).priority(250)
+        }
         
         topView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(8)
@@ -206,17 +234,14 @@ final class CardEditView: UIView {
         // Middle Content
         captionLabel.snp.makeConstraints { make in
             make.top.equalTo(self.backgroundImgView.snp.bottom).offset(32)
-            make.leading.equalTo(self.snp.leading).offset(16)
+            make.leading.equalTo(self.contentView.snp.leading).offset(16)
         }
         
         saveBtn.snp.makeConstraints { make in
-            make.leading.equalTo(self.snp.leading).offset(16)
-            make.trailing.equalTo(self.snp.trailing).offset(-16)
-            make.bottom.equalTo(self.snp.bottom).offset(-55)
+            make.leading.equalTo(self.contentView.snp.leading).offset(16)
+            make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
+            make.bottom.equalTo(self.contentView.snp.bottom).offset(-55)
             make.height.equalTo(44)
         }
     }
-    
-    // MARK: - Methods
-    
 }
