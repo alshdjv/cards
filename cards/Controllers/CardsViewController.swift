@@ -112,10 +112,7 @@ extension CardsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.layer.cornerRadius = 12
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 226
-//    }
+
 }
 
 extension CardsViewController: CardTableViewCellDidTapCell {

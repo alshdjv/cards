@@ -3,8 +3,9 @@ import SnapKit
 
 final class CardsEditViewController: UIViewController {
     
-    // Properties
+    private let cardEditView = CardEditView()
     
+    let cards = DisplayItem(backImgUrl: "small_3_img", balance: "73232 СУМ", numLabel: "..2341", dateLabel: "09/23", paymentImgUrl: "uzcard")
     
     // MARK: - Init
     
@@ -12,6 +13,31 @@ final class CardsEditViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         
+        self.setupCardEditViewUI()
         
+        self.configureBackgroundImage()
+    }
+    
+    private func setupCardEditViewUI() {
+        self.setupViews()
+        self.setConstraints()
+    }
+    
+    private func setupViews() {
+        self.view.addSubview(cardEditView)
+    }
+    
+    private func setConstraints() {
+        
+        cardEditView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+        }
+    }
+    
+    // MARK: - Methods
+    
+    private func configureBackgroundImage() {
+        self.cardEditView.displayEditItem = cards
     }
 }
