@@ -295,7 +295,7 @@ final class CardsTableViewCell: UITableViewCell {
             alphaView.isHidden = false
         case .activeCard:
             warningView.isHidden = true
-            alphaView.backgroundColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
+            alphaView.backgroundColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 0.12)
             alphaView.isHidden = true
         }
     }

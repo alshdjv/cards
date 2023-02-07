@@ -25,6 +25,14 @@ final class CardEditView: UIView {
         return label
     }()
     
+    private let aliasTextField: UITextField = {
+        let textField = UITextField()
+        textField.autocorrectionType = .no
+        textField.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+        textField.font = .systemFont(ofSize: 15, weight: .semibold)
+        return textField
+    }()
+    
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
@@ -54,6 +62,15 @@ final class CardEditView: UIView {
         return imageView
     }()
     
+    private let alphaView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
+    // Observers
+    
     var displayEditItem: DisplayItem? {
         didSet {
             guard let displayItem = displayEditItem else {return}
@@ -66,13 +83,9 @@ final class CardEditView: UIView {
                 balanceLabel.text = "\(balance)"
             }
 
-//            if let cardName = displayItem.cardName {
-//                aliasLabel.text = "\(cardName)"
-//            }
-
-//            if let penImgUrl = displayItem.penImgUrl {
-//                penImg.image = UIImage(named: penImgUrl)?.withRenderingMode(.alwaysOriginal)
-//            }
+            if let cardName = displayItem.cardName {
+                aliasTextField.text = "\(cardName)"
+            }
 
             if let numLabel = displayItem.numLabel {
                 numberLabel.text = "\(numLabel)"
@@ -116,6 +129,8 @@ final class CardEditView: UIView {
         self.cardInfoStackView.addArrangedSubview(expireLabel)
         self.mainView.addSubview(cardInfoStackView)
         self.mainView.addSubview(cardImage)
+        self.mainView.addSubview(alphaView)
+        self.mainView.addSubview(aliasTextField)
     }
     
     private func setViewConstraints() {
@@ -149,6 +164,19 @@ final class CardEditView: UIView {
             make.trailing.equalTo(self.mainView.snp.trailing).offset(-24)
             make.bottom.equalTo(self.mainView.snp.bottom).offset(-16)
             make.size.equalTo(CGSize(width: 40, height: 40))
+        }
+        
+        // ----- Alpha View -----
+        alphaView.snp.makeConstraints { make in
+            make.top.equalTo(self.mainView.snp.top)
+            make.leading.equalTo(self.mainView.snp.leading)
+            make.trailing.equalTo(self.mainView.snp.trailing)
+            make.bottom.equalTo(self.mainView.snp.bottom)
+        }
+        
+        aliasTextField.snp.makeConstraints { make in
+            make.top.equalTo(self.balanceLabel.snp.bottom).offset(8)
+            make.leading.equalTo(self.balanceLabel.snp.leading)
         }
     }
 }

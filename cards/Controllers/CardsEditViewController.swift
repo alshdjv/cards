@@ -5,7 +5,7 @@ final class CardsEditViewController: UIViewController {
     
     private let cardEditView = CardEditView()
     
-    let cards = DisplayItem(backImgUrl: "small_3_img", balance: "73232 СУМ", numLabel: "..2341", dateLabel: "09/23", paymentImgUrl: "uzcard")
+    let cards = DisplayItem(backImgUrl: "small_1_img", balance: "73232 СУМ", cardName: "Рабочая карта", numLabel: "..2341", dateLabel: "09/23", paymentImgUrl: "uzcard")
     
     // MARK: - Init
     
