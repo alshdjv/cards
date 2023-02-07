@@ -30,6 +30,7 @@ final class CardEditView: UIView {
         textField.autocorrectionType = .no
         textField.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         textField.font = .systemFont(ofSize: 15, weight: .semibold)
+        textField.becomeFirstResponder()
         return textField
     }()
     
@@ -70,7 +71,6 @@ final class CardEditView: UIView {
     }()
     
     // Observers
-    
     var displayEditItem: DisplayItem? {
         didSet {
             guard let displayItem = displayEditItem else {return}
@@ -179,4 +179,7 @@ final class CardEditView: UIView {
             make.leading.equalTo(self.balanceLabel.snp.leading)
         }
     }
+    
+    // MARK: - Methods
+    
 }
