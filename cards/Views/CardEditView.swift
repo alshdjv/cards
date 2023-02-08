@@ -2,19 +2,14 @@ import UIKit
 import SnapKit
 
 final class CardEditView: UIView {
-    
-    // Top Data
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
-    
-    private let contentView: UIView = {
-        let view = UIView()
+
+    private let scrollView : UIScrollView = {
+        let view = UIScrollView()
+        view.keyboardDismissMode = .interactive
         return view
     }()
     
-    private let topView: UIView = {
+    private let contentView: UIView = {
         let view = UIView()
         return view
     }()
@@ -89,6 +84,14 @@ final class CardEditView: UIView {
         return label
     }()
     
+    private let middleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
+    /// Button & Button Bottom Constraint
     private let saveBtn: UIButton = {
         let button = UIButton()
         let btnTitle = "Сохранить"
@@ -135,9 +138,12 @@ final class CardEditView: UIView {
     // MARK: - Init
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .systemBackground
-       
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
+        
         self.setupViewUI()
     }
     
@@ -155,17 +161,17 @@ final class CardEditView: UIView {
     private func setupViews() {
         self.addSubview(scrollView)
         self.scrollView.addSubview(contentView)
-        self.contentView.addSubview(topView)
-        self.topView.addSubview(backgroundImgView)
-        self.topView.addSubview(balanceLabel)
+        self.contentView.addSubview(backgroundImgView)
+        self.contentView.addSubview(balanceLabel)
         self.cardInfoStackView.addArrangedSubview(numberLabel)
         self.cardInfoStackView.addArrangedSubview(expireLabel)
-        self.topView.addSubview(cardInfoStackView)
-        self.topView.addSubview(cardImage)
-        self.topView.addSubview(alphaView)
-        self.topView.addSubview(aliasTextField)
+        self.contentView.addSubview(cardInfoStackView)
+        self.contentView.addSubview(cardImage)
+        self.contentView.addSubview(alphaView)
+        self.contentView.addSubview(aliasTextField)
         
         self.contentView.addSubview(captionLabel)
+        self.contentView.addSubview(middleView)
         self.contentView.addSubview(saveBtn)
     }
     
@@ -179,51 +185,44 @@ final class CardEditView: UIView {
         }
         
         contentView.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.bottom.equalTo(self.snp.bottom).priority(250)
-            make.centerX.equalTo(self.snp.centerX)
-            make.centerY.equalTo(self.snp.centerY).priority(250)
-        }
-        
-        topView.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(8)
-            make.leading.equalTo(self.snp.leading).offset(16)
-            make.trailing.equalTo(self.snp.trailing).offset(-16)
-            make.height.equalTo(self.snp.width).multipliedBy(10.0 / 17.0)
+            make.top.equalTo(self.scrollView.snp.top)
+            make.leading.equalTo(self.scrollView.snp.leading)
+            make.trailing.equalTo(self.scrollView.snp.trailing)
+            make.bottom.equalTo(self.scrollView.snp.bottom).priority(250)
+            make.centerX.equalTo(self.scrollView.snp.centerX)
+            make.centerY.equalTo(self.scrollView.snp.centerY).priority(250)
         }
         
         backgroundImgView.snp.makeConstraints { make in
-            make.top.equalTo(self.topView.snp.top)
-            make.leading.equalTo(self.topView.snp.leading)
-            make.trailing.equalTo(self.topView.snp.trailing)
-            make.bottom.equalTo(self.topView.snp.bottom)
+            make.top.equalTo(self.contentView.snp.top).offset(8)
+            make.leading.equalTo(self.contentView.snp.leading).offset(16)
+            make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
+            make.height.equalTo(self.contentView.snp.width).multipliedBy(10.0 / 17.0)
         }
         
         balanceLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.topView.snp.top).offset(16)
-            make.leading.equalTo(self.topView.snp.leading).offset(20)
+            make.top.equalTo(self.backgroundImgView.snp.top).offset(16)
+            make.leading.equalTo(self.backgroundImgView.snp.leading).offset(20)
             make.height.equalTo(32)
         }
         
         cardInfoStackView.snp.makeConstraints { make in
-            make.leading.equalTo(self.topView.snp.leading).offset(20)
-            make.bottom.equalTo(self.topView.snp.bottom).offset(-16)
+            make.leading.equalTo(self.backgroundImgView.snp.leading).offset(20)
+            make.bottom.equalTo(self.backgroundImgView.snp.bottom).offset(-16)
         }
         
         cardImage.snp.makeConstraints { make in
-            make.trailing.equalTo(self.topView.snp.trailing).offset(-24)
-            make.bottom.equalTo(self.topView.snp.bottom).offset(-16)
+            make.trailing.equalTo(self.backgroundImgView.snp.trailing).offset(-24)
+            make.bottom.equalTo(self.backgroundImgView.snp.bottom).offset(-16)
             make.size.equalTo(CGSize(width: 40, height: 40))
         }
         
         // ----- Alpha View -----
         alphaView.snp.makeConstraints { make in
-            make.top.equalTo(self.topView.snp.top)
-            make.leading.equalTo(self.topView.snp.leading)
-            make.trailing.equalTo(self.topView.snp.trailing)
-            make.bottom.equalTo(self.topView.snp.bottom)
+            make.top.equalTo(self.backgroundImgView.snp.top)
+            make.leading.equalTo(self.backgroundImgView.snp.leading)
+            make.trailing.equalTo(self.backgroundImgView.snp.trailing)
+            make.bottom.equalTo(self.backgroundImgView.snp.bottom)
         }
         
         aliasTextField.snp.makeConstraints { make in
@@ -237,11 +236,38 @@ final class CardEditView: UIView {
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
         }
         
-        saveBtn.snp.makeConstraints { make in
+        middleView.snp.makeConstraints { make in
+            make.top.equalTo(self.captionLabel.snp.bottom).offset(16)
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
             make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
-            make.bottom.equalTo(self.contentView.snp.bottom).offset(-55)
+            make.height.equalTo(64)
+            make.centerY.equalTo(self.contentView.snp.centerY)
+        }
+        
+        saveBtn.snp.makeConstraints { make in
+            make.top.equalTo(self.middleView.snp.bottom).offset(40)
+            make.leading.equalTo(self.contentView.snp.leading).offset(16)
+            make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
             make.height.equalTo(44)
         }
+    }
+    
+    // MARK: - Methods
+    
+    @objc func keyboardWillShow(notification:NSNotification) {
+        
+        guard let userInfo = notification.userInfo else { return }
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = self.convert(keyboardFrame, from: nil)
+
+        var contentInset:UIEdgeInsets = self.scrollView.contentInset
+        contentInset.bottom = keyboardFrame.size.height + 55
+        scrollView.contentInset = contentInset
+    }
+
+    @objc func keyboardWillHide(notification:NSNotification) {
+
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInset
     }
 }
