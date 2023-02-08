@@ -84,14 +84,14 @@ final class CardEditView: UIView {
         return label
     }()
     
-    private let middleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.layer.cornerRadius = 12
-        return view
-    }()
+    private let collectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        cv.register(HeaderCell.self, forCellWithReuseIdentifier: "HeaderCell")
+        cv.backgroundColor = .yellow
+        return cv
+     }()
     
-    /// Button & Button Bottom Constraint
     private let saveBtn: UIButton = {
         let button = UIButton()
         let btnTitle = "Сохранить"
@@ -141,9 +141,15 @@ final class CardEditView: UIView {
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .systemBackground
         
+        /// Notification Center keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
         
+        /// Calling Delegate and DataSource Patterns for Collection View
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        /// Setup View User Interface
         self.setupViewUI()
     }
     
@@ -171,7 +177,7 @@ final class CardEditView: UIView {
         self.contentView.addSubview(aliasTextField)
         
         self.contentView.addSubview(captionLabel)
-        self.contentView.addSubview(middleView)
+//        self.contentView.addSubview(middleView)
         self.contentView.addSubview(saveBtn)
     }
     
@@ -236,16 +242,16 @@ final class CardEditView: UIView {
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
         }
         
-        middleView.snp.makeConstraints { make in
-            make.top.equalTo(self.captionLabel.snp.bottom).offset(16)
-            make.leading.equalTo(self.contentView.snp.leading).offset(16)
-            make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
-            make.height.equalTo(64)
-            make.centerY.equalTo(self.contentView.snp.centerY)
-        }
+//        middleView.snp.makeConstraints { make in
+//            make.top.equalTo(self.captionLabel.snp.bottom).offset(16)
+//            make.leading.equalTo(self.contentView.snp.leading).offset(16)
+//            make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
+//            make.height.equalTo(64)
+//            make.centerY.equalTo(self.contentView.snp.centerY)
+//        }
         
         saveBtn.snp.makeConstraints { make in
-            make.top.equalTo(self.middleView.snp.bottom).offset(40)
+//            make.top.equalTo(self.middleView.snp.bottom).offset(40)
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
             make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
             make.height.equalTo(44)
@@ -269,5 +275,19 @@ final class CardEditView: UIView {
 
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
+    }
+}
+
+// MARK: - Extensions
+
+extension CardEditView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        <#code#>
     }
 }
