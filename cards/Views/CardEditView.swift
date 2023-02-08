@@ -1,8 +1,21 @@
 import UIKit
 import SnapKit
 
-final class CardEditView: UIView {
+struct BackgroundImageForCells {
+    let backgImage: String?
+}
 
+final class CardEditView: UIView {
+    
+    let cellBackgroundImage = [
+        BackgroundImageForCells(backgImage: "small_1_img"),
+        BackgroundImageForCells(backgImage: "small_2_img"),
+        BackgroundImageForCells(backgImage: "small_3_img"),
+        BackgroundImageForCells(backgImage: "small_4_img")
+    ]
+    
+    // MARK: - Properties
+    
     private let scrollView : UIScrollView = {
         let view = UIScrollView()
         view.keyboardDismissMode = .interactive
@@ -287,14 +300,14 @@ final class CardEditView: UIView {
 extension CardEditView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return cellBackgroundImage.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CardsEditCollectioViewCell.identifier, for: indexPath) as? CardsEditCollectioViewCell else {
             return UICollectionViewCell()
         }
-        
+        cell.cellBackImage = cellBackgroundImage[indexPath.row]
         return cell
     }
 }

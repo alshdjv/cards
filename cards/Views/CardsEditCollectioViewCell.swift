@@ -14,6 +14,17 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    // Observers
+    var cellBackImage: BackgroundImageForCells? {
+        didSet {
+            guard let cellImage = cellBackImage else {return}
+            
+            if let backImgUrl = cellImage.backgImage{
+                posterImage.image = UIImage(named: backImgUrl)
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.contentView.addSubview(posterImage)
