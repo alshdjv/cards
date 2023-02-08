@@ -217,7 +217,7 @@ final class CardEditView: UIView {
         }
         
         backgroundImgView.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView.snp.top).offset(8)
+            make.top.equalTo(self.contentView.snp.top)
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
             make.trailing.equalTo(self.contentView.snp.trailing).offset(-16)
             make.height.equalTo(self.contentView.snp.width).multipliedBy(10.0 / 17.0)
