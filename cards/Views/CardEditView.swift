@@ -157,16 +157,13 @@ final class CardEditView: UIView {
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = .systemBackground
         
-        /// Notification Center keyboard
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
-        
         /// Calling Delegate and DataSource Patterns for Collection View
         collectionView.delegate = self
         collectionView.dataSource = self
         
         /// Setup View User Interface
         self.setupViewUI()
+        self.dismissKey()
     }
     
     required init?(coder: NSCoder) {
@@ -216,6 +213,7 @@ final class CardEditView: UIView {
             make.centerY.equalTo(self.scrollView.snp.centerY).priority(250)
         }
         
+        // Top Content
         backgroundImgView.snp.makeConstraints { make in
             make.top.equalTo(self.contentView.snp.top)
             make.leading.equalTo(self.contentView.snp.leading).offset(16)
@@ -277,22 +275,16 @@ final class CardEditView: UIView {
     
     // MARK: - Methods
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        
-        guard let userInfo = notification.userInfo else { return }
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.convert(keyboardFrame, from: nil)
+  private func dismissKey() {
+      let tap: UITapGestureRecognizer = UITapGestureRecognizer( target: self, action: #selector(dismissKeyboard))
+      tap.cancelsTouchesInView = false
+      addGestureRecognizer(tap)
+  }
 
-        var contentInset: UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 55
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-
-        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInset
-    }
+  @objc func dismissKeyboard() {
+      self.endEditing(true)
+      self.resignFirstResponder()
+  }
 }
 
 // MARK: - Extensions
