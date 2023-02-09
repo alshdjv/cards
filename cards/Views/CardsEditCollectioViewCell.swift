@@ -6,8 +6,7 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
     static let identifier = "CardsEditCollectioViewCell"
     
     private let posterImage: UIImageView = {
-        let image = UIImage(named: "small_4_img")
-        let imageView = UIImageView(image: image?.withRenderingMode(.alwaysOriginal))
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 32
@@ -19,6 +18,7 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
         view.layer.cornerRadius = 26
         view.layer.borderWidth = 3
         view.layer.borderColor = UIColor.white.cgColor
+        view.isHidden = true
         return view
     }()
     
@@ -41,6 +41,11 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
         self.setupUI()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.posterImage.frame = contentView.bounds
+    }
+    
     private func setupUI() {
         
         borderView.snp.makeConstraints { make in
@@ -48,7 +53,6 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
             make.leading.equalTo(self.posterImage.snp.leading).offset(6)
             make.trailing.equalTo(self.posterImage.snp.trailing).offset(-6)
             make.bottom.equalTo(self.posterImage.snp.bottom).offset(-6)
-//            make.size.equalTo(CGSize(width: 52, height: 52))
         }
     }
     
@@ -56,8 +60,13 @@ final class CardsEditCollectioViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.posterImage.frame = contentView.bounds
+    // MARK: - Methods
+    
+    func toggleSelected () {
+        if (isSelected){
+            borderView.isHidden = false
+        } else {
+            borderView.isHidden = true
+        }
     }
 }

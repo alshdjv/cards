@@ -277,20 +277,20 @@ final class CardEditView: UIView {
     
     // MARK: - Methods
     
-    @objc func keyboardWillShow(notification:NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         guard let userInfo = notification.userInfo else { return }
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.convert(keyboardFrame, from: nil)
 
-        var contentInset:UIEdgeInsets = self.scrollView.contentInset
+        var contentInset: UIEdgeInsets = self.scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height + 55
         scrollView.contentInset = contentInset
     }
 
-    @objc func keyboardWillHide(notification:NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
 
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
 }
@@ -309,5 +309,15 @@ extension CardEditView: UICollectionViewDataSource, UICollectionViewDelegate, UI
         }
         cell.cellBackImage = cellBackgroundImage[indexPath.row]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCell = collectionView.cellForItem(at: indexPath) as? CardsEditCollectioViewCell
+        selectedCell?.toggleSelected()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let deselected = collectionView.cellForItem(at: indexPath) as? CardsEditCollectioViewCell
+        deselected?.toggleSelected()
     }
 }
